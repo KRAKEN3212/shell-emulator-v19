@@ -1,0 +1,29 @@
+# Служебные файлы Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Артефакты сборки
+build/
+dist/
+
+# Архивы
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Настройки редакторов и IDE
+.idea/
+.vscode/
+*.swp
+*~
+
+# Файлы ОС
+.DS_Store
+Thumbs.db
