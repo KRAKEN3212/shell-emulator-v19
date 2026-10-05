@@ -10,6 +10,7 @@ import string
 
 NAME_CHARS = string.ascii_letters + string.digits + "_"
 DOUBLE_QUOTE_ESCAPABLE = '"\\$'
+NOT_FOUND = -1
 
 
 class ParseError(Exception):
@@ -69,7 +70,7 @@ class _Lexer:
     def _single_quoted(self):
         """Строка в одинарных кавычках: всё берётся буквально."""
         end = self.line.find("'", self.pos + 1)
-        if end < 0:
+        if end == NOT_FOUND:
             raise ParseError("unexpected EOF while looking for matching `''")
         self.word.append(self.line[self.pos + 1:end])
         self.pos = end + 1
@@ -108,8 +109,8 @@ class _Lexer:
         """Раскрывает переменную окружения $NAME или ${NAME}."""
         if self._next_in("{"):
             end = self.line.find("}", self.pos + 2)
-            name = self.line[self.pos + 2:end] if end >= 0 else ""
-            if end < 0 or not _is_name(name):
+            name = self.line[self.pos + 2:end] if end != NOT_FOUND else ""
+            if end == NOT_FOUND or not _is_name(name):
                 raise ParseError("bad substitution")
             self.pos = end + 1
         else:

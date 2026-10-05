@@ -1,0 +1,19 @@
+# Полная демонстрация всех команд эмулятора (этапы 1-5)
+# Запуск: run.sh --vfs examples/vfs/deep.json \
+#                --script examples/scripts/full_demo.txt
+
+vfs-info
+ls -l
+cd home/artyom
+ls
+find . -type f
+rev hello.txt
+cd projects
+rmdir old
+ls
+cd -
+find / -name "*.log"
+rev /var/log/system.log
+unknown_command               # ошибка: неизвестная команда
+ls "unclosed                  # ошибка: синтаксис
+# exit 0                      # раскомментируйте, чтобы закрыть окно

@@ -1,0 +1,26 @@
+# Этап 5: rmdir (изменения только в памяти, файл VFS не меняется)
+# Запуск: run.sh --vfs examples/vfs/deep.json \
+#                --script examples/scripts/stage5_rmdir.txt
+
+ls /home
+rmdir /home/guest             # удалить пустой каталог
+ls /home
+
+find /tmp
+rmdir -p /tmp/a/b/c           # удалить цепочку пустых каталогов
+ls /
+
+cd /home/artyom/projects
+rmdir old shell               # old удалится, shell — не пуст
+ls
+rmdir -p ../projects/shell    # ошибка: каталог не пуст
+
+cd /
+rmdir                         # ошибка: нет операнда
+rmdir /nope                   # ошибка: нет каталога
+rmdir /etc/motd               # ошибка: не каталог
+rmdir /etc                    # ошибка: каталог не пуст
+rmdir /                       # ошибка: корень занят
+rmdir /var/.                  # ошибка: недопустимый аргумент
+rmdir -x /var                 # ошибка: неизвестная опция
+vfs-info                      # число каталогов уменьшилось

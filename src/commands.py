@@ -202,6 +202,61 @@ def cmd_rev(shell, args):
     return report.finish()
 
 
+def _is_busy(vfs, node):
+    """True для корня и для каталогов на пути к текущему каталогу."""
+    current = vfs.cwd
+    while current is not None:
+        if current is node:
+            return True
+        current = current.parent
+    return False
+
+
+def _remove_dir(vfs, path):
+    """Удаляет пустой каталог path из VFS (только в памяти)."""
+    last = path.rstrip(SEPARATOR).rsplit(SEPARATOR, 1)[-1]
+    if last in (".", ".."):
+        raise VfsError("Invalid argument")
+    node = vfs.resolve(path)
+    if not node.is_dir:
+        raise VfsError("Not a directory")
+    if _is_busy(vfs, node):
+        raise VfsError("Device or resource busy")
+    if node.children:
+        raise VfsError("Directory not empty")
+    del node.parent.children[node.name]
+
+
+def _parent_paths(path):
+    """Путь и все его родители по записи: a/b/c -> a/b/c, a/b, a."""
+    parts = [part for part in path.split(SEPARATOR) if part]
+    prefix = SEPARATOR if path.startswith(SEPARATOR) else ""
+    return [prefix + SEPARATOR.join(parts[:end])
+            for end in range(len(parts), 0, -1)]
+
+
+def cmd_rmdir(shell, args):
+    """rmdir [-p] КАТАЛОГ... — удаляет пустые каталоги VFS.
+
+    С опцией -p удаляются и родительские каталоги из пути.
+    Изменения выполняются только в памяти.
+    """
+    options, paths = split_options(args, "p")
+    if not paths:
+        raise CommandError("missing operand")
+    report = _Report()
+    for path in paths:
+        chain = _parent_paths(path) if "p" in options else [path]
+        for target in chain or [path]:
+            try:
+                _remove_dir(shell.vfs, target)
+            except VfsError as error:
+                report.errors.append(
+                    f"failed to remove '{target}': {error}")
+                break
+    return report.finish()
+
+
 def cmd_vfs_info(shell, args):
     """vfs-info — служебная команда: сведения о загруженной VFS."""
     if args:
@@ -237,6 +292,7 @@ REGISTRY = {
     "cd": cmd_cd,
     "find": cmd_find,
     "rev": cmd_rev,
+    "rmdir": cmd_rmdir,
     "vfs-info": cmd_vfs_info,
     "exit": cmd_exit,
 }
