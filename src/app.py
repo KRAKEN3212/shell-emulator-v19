@@ -3,11 +3,14 @@
 import tkinter as tk
 from tkinter import scrolledtext
 
+from src.script import ScriptError, read_script
+
 FONT = ("Consolas", 11)
 BACKGROUND = "#1e1e1e"
 FOREGROUND = "#d4d4d4"
 PROMPT_COLOR = "#6a9955"
 ERROR_COLOR = "#f44747"
+DEBUG_COLOR = "#808080"
 WINDOW_SIZE = "860x520"
 
 
@@ -32,6 +35,7 @@ class EmulatorApp:
             state=tk.DISABLED, wrap=tk.WORD)
         self.output.tag_config("prompt", foreground=PROMPT_COLOR)
         self.output.tag_config("error", foreground=ERROR_COLOR)
+        self.output.tag_config("debug", foreground=DEBUG_COLOR)
         self.output.pack(fill=tk.BOTH, expand=True)
 
     def _build_input(self):
@@ -57,6 +61,32 @@ class EmulatorApp:
         self.output.insert(tk.END, text, tag)
         self.output.configure(state=tk.DISABLED)
         self.output.see(tk.END)
+
+    def write_lines(self, lines, tag=None):
+        """Выводит несколько строк с одним тегом оформления."""
+        for line in lines:
+            self.write(line + "\n", tag)
+
+    def schedule_script(self, path):
+        """Запускает стартовый скрипт после открытия окна."""
+        self.root.after(0, lambda: self.run_script(path))
+
+    def run_script(self, path):
+        """Выполняет команды скрипта, показывая ввод и вывод.
+
+        Ошибка в команде не прерывает скрипт, чтобы в одном скрипте
+        можно было продемонстрировать несколько ошибочных ситуаций.
+        Команда exit завершает скрипт и эмулятор.
+        """
+        try:
+            lines = read_script(path)
+        except ScriptError as error:
+            self.write(f"emulator: {error}\n", "error")
+            return
+        for line in lines:
+            self.run_line(line)
+            if not self.shell.running:
+                return
 
     def run_line(self, line):
         """Показывает введённую строку, выполняет её и выводит результат."""
