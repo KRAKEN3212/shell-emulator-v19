@@ -20,6 +20,14 @@ def get_user_host():
     return user, socket.gethostname()
 
 
+def _format_error(name, error):
+    """Вывод команды до ошибки и сообщения об ошибках с её именем."""
+    lines = [error.output] if error.output else []
+    lines.extend(f"{name}: {message}"
+                 for message in str(error).splitlines())
+    return "\n".join(lines)
+
+
 class Shell:
     """Состояние сеанса эмулятора и выполнение команд."""
 
@@ -66,6 +74,6 @@ class Shell:
         try:
             result = handler(self, args)
         except commands.CommandError as error:
-            return f"{name}: {error}"
+            return _format_error(name, error)
         self.last_failed = False
         return result

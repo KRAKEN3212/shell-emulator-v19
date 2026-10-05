@@ -1,0 +1,38 @@
+# Этап 4: ls, cd, find, rev
+# Запуск: run.sh --vfs examples/vfs/deep.json \
+#                --script examples/scripts/stage4_commands.txt
+
+# --- ls ---
+ls                        # текущий каталог (корень)
+ls -l /etc                # подробный формат
+ls /etc/motd /home /tmp   # файл и несколько каталогов
+ls /nope /var             # ошибка по одному из операндов
+ls -z                     # ошибка: неизвестная опция
+
+# --- cd ---
+cd /home/artyom/projects
+ls
+cd ../..                  # относительный путь с ..
+cd -                      # вернуться в предыдущий каталог
+cd                        # в корень VFS
+cd /nope                  # ошибка: нет такого каталога
+cd /etc/motd              # ошибка: не каталог
+cd a b                    # ошибка: слишком много аргументов
+cd $HOME                  # ошибка: путь реальной ОС отсутствует в VFS
+
+# --- find ---
+find /tmp
+find / -name "*.txt"
+find /home -type d
+find / -type f -name "*.p*"
+find /nope                # ошибка: нет такого пути
+find -size 1              # ошибка: неизвестный предикат
+find -name                # ошибка: нет аргумента
+find -type x              # ошибка: неверный тип
+
+# --- rev ---
+rev /etc/motd
+rev /home/artyom/hello.txt /etc/hostname
+rev                       # ошибка: нет операнда
+rev /etc                  # ошибка: это каталог
+rev /nope                 # ошибка: нет файла

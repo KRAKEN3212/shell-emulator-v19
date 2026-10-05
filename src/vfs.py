@@ -66,6 +66,7 @@ class Vfs:
         """Создаёт VFS с корнем root; source — путь к JSON-файлу."""
         self.root = root
         self.cwd = root
+        self.previous = root
         self.source = source
 
     @classmethod
