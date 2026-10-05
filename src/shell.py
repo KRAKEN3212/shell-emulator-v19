@@ -8,6 +8,7 @@ import socket
 
 from src import commands
 from src.parser import ParseError, parse
+from src.vfs import Vfs
 
 
 def get_user_host():
@@ -22,8 +23,13 @@ def get_user_host():
 class Shell:
     """Состояние сеанса эмулятора и выполнение команд."""
 
-    def __init__(self, env=None):
-        """Создаёт сеанс; env — переменные окружения для парсера."""
+    def __init__(self, vfs=None, env=None):
+        """Создаёт сеанс.
+
+        vfs — виртуальная файловая система (по умолчанию пустая),
+        env — переменные окружения для парсера (по умолчанию ОС).
+        """
+        self.vfs = vfs or Vfs.empty()
         self.env = env
         self.user, self.host = get_user_host()
         self.running = True
@@ -37,7 +43,7 @@ class Shell:
 
     def prompt(self):
         """Строка приглашения к вводу."""
-        return f"{self.user}@{self.host}:~$ "
+        return f"{self.user}@{self.host}:{self.vfs.cwd.path()}$ "
 
     def execute(self, line):
         """Выполняет одну строку и возвращает текст вывода.

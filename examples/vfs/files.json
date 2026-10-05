@@ -1,0 +1,11 @@
+{
+  "type": "dir",
+  "children": [
+    {"name": "readme.txt", "type": "file",
+     "content": "Hello from VFS!\nSecond line\n"},
+    {"name": "notes.txt", "type": "file", "content": "abc\n12345\n"},
+    {"name": "empty.txt", "type": "file", "content": ""},
+    {"name": "logo.bin", "type": "file", "encoding": "base64",
+     "content": "iVBORw0KGgo="}
+  ]
+}

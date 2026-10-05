@@ -1,0 +1,41 @@
+{
+  "type": "dir",
+  "children": [
+    {"name": "etc", "type": "dir", "children": [
+      {"name": "hostname", "type": "file", "content": "vfs-host\n"},
+      {"name": "motd", "type": "file",
+       "content": "Welcome to the emulator\nHave a nice day\n"}
+    ]},
+    {"name": "home", "type": "dir", "children": [
+      {"name": "artyom", "type": "dir", "children": [
+        {"name": "hello.txt", "type": "file",
+         "content": "hello world\nstressed desserts\n"},
+        {"name": "projects", "type": "dir", "children": [
+          {"name": "shell", "type": "dir", "children": [
+            {"name": "main.py", "type": "file",
+             "content": "print('hi')\n"},
+            {"name": "README.md", "type": "file",
+             "content": "# Shell\n"}
+          ]},
+          {"name": "old", "type": "dir", "children": []}
+        ]},
+        {"name": "photo.png", "type": "file", "encoding": "base64",
+         "content": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="}
+      ]},
+      {"name": "guest", "type": "dir", "children": []}
+    ]},
+    {"name": "tmp", "type": "dir", "children": [
+      {"name": "a", "type": "dir", "children": [
+        {"name": "b", "type": "dir", "children": [
+          {"name": "c", "type": "dir", "children": []}
+        ]}
+      ]}
+    ]},
+    {"name": "var", "type": "dir", "children": [
+      {"name": "log", "type": "dir", "children": [
+        {"name": "system.log", "type": "file",
+         "content": "boot ok\nlogin artyom\n"}
+      ]}
+    ]}
+  ]
+}

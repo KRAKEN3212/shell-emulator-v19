@@ -1,0 +1,9 @@
+# Этап 3: работа с VFS и команды прошлых этапов
+# Запуск: run.sh --vfs examples/vfs/deep.json \
+#                --script examples/scripts/stage3_vfs.txt
+vfs-info              # служебная команда: сведения о VFS
+vfs-info extra        # ошибка: лишний аргумент
+ls /home              # заглушка этапа 1
+cd $HOME              # переменная окружения ОС
+unknown               # ошибка: неизвестная команда
+ls 'unclosed          # ошибка: незакрытая кавычка

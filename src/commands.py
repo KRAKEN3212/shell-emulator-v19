@@ -27,6 +27,20 @@ def cmd_cd(shell, args):
     return _stub("cd", args)
 
 
+def cmd_vfs_info(shell, args):
+    """vfs-info — служебная команда: сведения о загруженной VFS."""
+    if args:
+        raise CommandError("too many arguments")
+    dirs, files, size = shell.vfs.stats()
+    source = shell.vfs.source or "<пустая VFS по умолчанию>"
+    return "\n".join([
+        f"source: {source}",
+        f"dirs:   {dirs}",
+        f"files:  {files}",
+        f"bytes:  {size}",
+    ])
+
+
 def cmd_exit(shell, args):
     """exit [код] — завершает работу эмулятора."""
     if len(args) > MAX_EXIT_ARGS:
@@ -46,5 +60,6 @@ def cmd_exit(shell, args):
 REGISTRY = {
     "ls": cmd_ls,
     "cd": cmd_cd,
+    "vfs-info": cmd_vfs_info,
     "exit": cmd_exit,
 }

@@ -1,0 +1,4 @@
+{"type": "dir", "children": [
+  {"name": "a.txt", "type": "file", "content": "ok"},
+  {"name": "a.txt", "type": "file", "content": "duplicate"}
+]}
