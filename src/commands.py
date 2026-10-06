@@ -25,7 +25,7 @@ class CommandError(Exception):
         self.output = output
 
 
-class _Report:
+class Report:
     """Накопитель вывода и ошибок команды."""
 
     def __init__(self):
@@ -90,7 +90,7 @@ def cmd_ls(shell, args):
     """
     options, paths = split_options(args, "l")
     long_format = "l" in options
-    report = _Report()
+    report = Report()
     targets = _resolve_all(shell.vfs, paths or ["."], report)
     for path, node in targets:
         if not node.is_dir:
@@ -171,7 +171,7 @@ def _find_walk(node, shown, filters, lines):
 def cmd_find(shell, args):
     """find [путь...] [-name ШАБЛОН] [-type f|d] — поиск в VFS."""
     paths, filters = _parse_find_args(args)
-    report = _Report()
+    report = Report()
     for path in paths:
         try:
             node = shell.vfs.resolve(path)
@@ -187,7 +187,7 @@ def cmd_rev(shell, args):
     _, paths = split_options(args, "")
     if not paths:
         raise CommandError("missing file operand")
-    report = _Report()
+    report = Report()
     for path in paths:
         try:
             node = shell.vfs.resolve(path)
@@ -244,7 +244,7 @@ def cmd_rmdir(shell, args):
     options, paths = split_options(args, "p")
     if not paths:
         raise CommandError("missing operand")
-    report = _Report()
+    report = Report()
     for path in paths:
         chain = _parent_paths(path) if "p" in options else [path]
         for target in chain or [path]:

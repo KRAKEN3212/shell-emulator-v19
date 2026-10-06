@@ -17,7 +17,7 @@ class ParseError(Exception):
     """Синтаксическая ошибка в командной строке."""
 
 
-class _Lexer:
+class Lexer:
     """Посимвольный разбор одной строки."""
 
     def __init__(self, line, env):
@@ -136,4 +136,4 @@ def parse(line, env=None):
     Неизвестные переменные раскрываются в пустую строку, как в bash.
     При синтаксической ошибке возбуждается ParseError.
     """
-    return _Lexer(line, os.environ if env is None else env).run()
+    return Lexer(line, os.environ if env is None else env).run()
